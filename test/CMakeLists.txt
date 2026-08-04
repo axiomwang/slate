@@ -27,35 +27,31 @@ if (NOT DEFINED SCALAPACK_LIBRARIES)
         if (SCALAPACK_FOUND)
             if (TARGET ScaLAPACK::ScaLAPACK)
                 set( SCALAPACK_LIBRARIES ScaLAPACK::ScaLAPACK )
-            else()
-                set( SCALAPACK_LIBRARIES ${SCALAPACK_LIBRARIES} )
             endif()
         else()
             # Fall back to find_library for scalapack.
-            find_library( SCALAPACK_LIBRARY
+            find_library( SCALAPACK_LIBRARIES
                 NAMES scalapack scalapack-openmpi scalapack-mpich
                 HINTS ${SCALAPACK_ROOT} $ENV{SCALAPACK_ROOT}
                 PATH_SUFFIXES lib lib64
             )
-            if (SCALAPACK_LIBRARY)
-                set( SCALAPACK_LIBRARIES ${SCALAPACK_LIBRARY} )
+            if (SCALAPACK_LIBRARIES)
                 # Also look for BLACS library, which may be separate on
                 # some systems (e.g., older ScaLAPACK or custom builds).
-                get_filename_component( _scalapack_dir ${SCALAPACK_LIBRARY} DIRECTORY )
+                get_filename_component( scalapack_dir_ ${SCALAPACK_LIBRARIES} DIRECTORY )
                 find_library( BLACS_LIBRARY
                     NAMES blacs blacs-openmpi blacs-mpich blacsCinit
-                    HINTS ${_scalapack_dir}
+                    HINTS ${scalapack_dir_}
                     NO_DEFAULT_PATH
                 )
                 if (BLACS_LIBRARY)
                     list( APPEND SCALAPACK_LIBRARIES ${BLACS_LIBRARY} )
                 endif()
-                unset( _scalapack_dir )
+                unset( scalapack_dir_ )
                 unset( BLACS_LIBRARY )
             else()
                 set( SCALAPACK_LIBRARIES "none" )
             endif()
-            unset( SCALAPACK_LIBRARY CACHE )
         endif()
     endif()
 endif()
