@@ -24,11 +24,14 @@ if (NOT DEFINED SCALAPACK_LIBRARIES)
         # First try find_package (some distributions provide a
         # FindScaLAPACK.cmake or ScaLAPACKConfig.cmake).
         find_package( ScaLAPACK QUIET )
-        if (SCALAPACK_FOUND)
+        if (ScaLAPACK_FOUND)
             if (TARGET ScaLAPACK::ScaLAPACK)
                 set( SCALAPACK_LIBRARIES ScaLAPACK::ScaLAPACK )
+            elseif (DEFINED ScaLAPACK_LIBRARIES)
+                set( SCALAPACK_LIBRARIES "${ScaLAPACK_LIBRARIES}" )
             endif()
-        else()
+        endif()
+        if (NOT SCALAPACK_LIBRARIES)
             # Fall back to find_library for scalapack.
             find_library( SCALAPACK_LIBRARIES
                 NAMES scalapack scalapack-openmpi scalapack-mpich
