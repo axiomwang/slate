@@ -20,7 +20,6 @@ project(
     LANGUAGES CXX Fortran
 )
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # See notes in GNUmakefile about using abi-compliance-checker.
 # soversion is major ABI version.
